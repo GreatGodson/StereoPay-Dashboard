@@ -1,49 +1,53 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:streopay_dashboard/constants/controllers.dart';
 import 'package:streopay_dashboard/constants/style.dart';
 import 'package:streopay_dashboard/core/services/authentication.dart';
 import 'package:streopay_dashboard/routing/routes.dart';
 import 'package:streopay_dashboard/widgets/custom_text.dart';
 
-class AuthenticationPage extends StatefulWidget {
-  AuthenticationPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<AuthenticationPage> createState() => _AuthenticationPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _AuthenticationPageState extends State<AuthenticationPage> {
+class _RegisterPageState extends State<RegisterPage> {
   AuthenticationService authenticationService = AuthenticationService();
+
+  String firstName = '';
 
   String email = '';
 
   String password = '';
 
-  bool isLoading = false;
+  register(context) async {
 
-  login(context) async {
-    try {
+    try{
       setState(() {
         isLoading = true;
       });
-      final t = await authenticationService.logInUser(
-          email: email, password: password, context: context);
-      t.uid.isNotEmpty ? Get.offAllNamed(rootRoute) : '';
-
-      print(t);
-    } catch (e) {
+      var t = await authenticationService.registerUser(
+          email: email,
+          password: password,
+          firstName: firstName,
+          context: context);
+      t != null ? Get.offAllNamed(rootRoute) : '';
       setState(() {
         isLoading = false;
       });
-      print(e);
+    } catch (e){
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
+
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: Center(
         child: Container(
-          height: 582,
+          height: 700,
           width: 380,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -113,7 +117,34 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 ],
               ),
               const SizedBox(
-                height: 38,
+                height: 24,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text("NAME",
+                        style: GoogleFonts.mulish(
+                            fontSize: 12,
+                            letterSpacing: 0.3,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.lightTextColor)),
+                  ),
+                  TextField(
+                    onChanged: (val) {
+                      firstName = val.trim();
+                    },
+                    decoration: InputDecoration(
+                        labelText: "Name",
+                        hintText: "John Doe",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 24,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,10 +197,10 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                     ),
                   ),
                   TextField(
+                    obscureText: true,
                     onChanged: (val) {
                       password = val.trim();
                     },
-                    obscureText: true,
                     decoration: InputDecoration(
                         labelText: "Password",
                         hintText: "123",
@@ -184,42 +215,41 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               const SizedBox(
                 height: 15,
               ),
-              isLoading
-                  ? const CircularProgressIndicator()
-                  : InkWell(
-                      onTap: () {
-                        login(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: AppColors.buttonColor,
-                            borderRadius: BorderRadius.circular(8)),
-                        alignment: Alignment.center,
-                        width: double.maxFinite,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const CustomText(
-                          text: "Log in",
-                          color: AppColors.whiteColor,
-                        ),
-                      ),
-                    ),
+              isLoading? const CircularProgressIndicator():
+              InkWell(
+                onTap: () {
+                  register(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.buttonColor,
+                      borderRadius: BorderRadius.circular(8)),
+                  alignment: Alignment.center,
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: const CustomText(
+                    text: "Sign Up",
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 15,
               ),
               GestureDetector(
                 onTap: () {
-                  Get.offAllNamed(registerPageRoute);
+                  Get.offAllNamed(authenticationPageRoute);
                 },
                 child: RichText(
                     text: TextSpan(children: [
                   TextSpan(
-                      text: "Don't not have an account? ",
+                      text: "Already  have an account? ",
                       style: GoogleFonts.mulish(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: AppColors.lightTextColor)),
                   const TextSpan(
-                      text: "Sign Up ",
+                      text: "Sign In ",
                       style: TextStyle(color: AppColors.buttonColor))
                 ])),
               )

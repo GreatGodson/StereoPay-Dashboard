@@ -16,4 +16,10 @@ class AppColors {
   static const Color dividerColor = Color(0XFFDFE0EB);
 
   static const Color rowLightTextColor = Color(0XFFC5C7CD);
+
+  static const Color lowPriorityColor = Color(0XFFFEC400);
+
+  static const Color normalPriorityColor = Color(0XFF29CC97);
+
+  static const Color highPriorityColor = Color(0XFFF12B2C);
 }

@@ -27,6 +27,9 @@ const subscriptionPageRoute = "/auth";
 const authenticationPageDisplayName = "Log out";
 const authenticationPageRoute = "/auth";
 
+const registerPageDisplayName = "Register";
+const registerPageRoute = "/register";
+
 class MenuItem {
   final String name;
   final String route;
