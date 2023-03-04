@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -26,10 +29,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -52,12 +52,13 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyApVsiUBruwOiUlGhJhKL478SWNcdiWfkw',
-    appId: '1:878017612145:web:db42303c46dca7b1758ed0',
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyClIgC9De-36YSKXdEvXhFGvBrPaAZwNAU',
+    appId: '1:878017612145:ios:260bfdfd658c0cad758ed0',
     messagingSenderId: '878017612145',
     projectId: 'stereopay-dashboard',
-    authDomain: 'stereopay-dashboard.firebaseapp.com',
     storageBucket: 'stereopay-dashboard.appspot.com',
+    iosClientId: '878017612145-ua0b1319slt3dshk6k1gqoloahb9id24.apps.googleusercontent.com',
+    iosBundleId: 'com.example.streopayDashboard',
   );
 }
